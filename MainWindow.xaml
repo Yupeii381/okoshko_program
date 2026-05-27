@@ -1,16 +1,61 @@
 ﻿<Window x:Class="okoshko.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:okoshko"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="250" Width="300">
-    <Grid>
-        <Button Content="Выбрать файл" HorizontalAlignment="Center" VerticalAlignment="Top" Width="100" Margin="30" Click="Choose_File"/>
-        <RadioButton x:Name="Decode_RB" Content="Decode" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="60" Checked="Decode_RB_Checked"/>
-        <RadioButton x:Name="Encode_RB"  Content="Encode" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="80" Checked="Encode_RB_Checked" />
-        <Button Content="Действовать" HorizontalAlignment="Center" VerticalAlignment="Top" Width="100" Margin="0,123,0,0" Click="DoAnAction"/>
-        <TextBlock x:Name="Output" HorizontalAlignment="Center" VerticalAlignment="Top" Width="10" Margin="130"/> 
+        Title="Okoshko" Height="320" Width="650">
+
+    <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="160"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Grid.Column="0">
+            <Button Content="Выбрать файлы"
+                    Command="{Binding ChooseFilesCommand}"
+                    Height="30"/>
+
+            <TextBlock Text="Размер блока:" Margin="0,20,0,5"/>
+
+            <Slider Minimum="5"
+                    Maximum="12"
+                    TickFrequency="1"
+                    IsSnapToTickEnabled="True"
+                    TickPlacement="BottomRight"
+                    Value="{Binding BlockSizePower}"/>
+
+            <TextBlock Text="{Binding BlockSizeText}" Margin="0,5,0,20"/>
+
+            <RadioButton Content="Encode"
+                         IsChecked="{Binding IsEncodeSelected}"
+                         Margin="0,10,0,0"/>
+
+            <RadioButton Content="Decode"
+                         IsChecked="{Binding IsDecodeSelected}"
+                         Margin="0,5,0,20"/>
+
+            <Button Content="Действовать"
+                    Command="{Binding ProcessFilesCommand}"
+                    Height="30"/>
+
+            <TextBlock Text="{Binding StatusMessage}"
+                       TextWrapping="Wrap"
+                       Margin="0,20,0,0"/>
+        </StackPanel>
+
+        <DataGrid Grid.Column="1"
+                  ItemsSource="{Binding Files}"
+                  AutoGenerateColumns="False"
+                  IsReadOnly="True"
+                  Margin="15,0,0,0">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Файл"
+                                    Binding="{Binding FileName}"
+                                    Width="*"/>
+
+                <DataGridTextColumn Header="Статус"
+                                    Binding="{Binding Status}"
+                                    Width="130"/>
+            </DataGrid.Columns>
+        </DataGrid>
     </Grid>
 </Window>
